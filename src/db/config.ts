@@ -29,16 +29,14 @@ export function initModels() {
 }
 
 export function connect() {
-    return new Promise((resolve, reject) => {
-        initModels();
+    initModels();
 
-        connection
-            .authenticate()
-            .then(() => {
-                console.log("database successfully connected!!");
-            })
-            .catch((err: Error) => {
-                console.log("Error", err);
-            });
-    });
+    connection
+        .authenticate()
+        .then(() => {
+            console.log("database successfully connected!!");
+        })
+        .catch((err: Error) => {
+            console.log("Error", err);
+        });
 }

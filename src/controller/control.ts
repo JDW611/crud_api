@@ -1,10 +1,15 @@
 import { RequestHandler } from "express";
-import { Todos } from "../models/model";
+import {
+    createToDos,
+    getAllTodos,
+    getTodosById,
+    deleteToDos,
+    updateTodos,
+} from "../services/service";
 
-export const createToDo: RequestHandler = async (req, res, next) => {
+export const createToDo: RequestHandler = (req, res, next) => {
     try {
-        const { name, description } = req.body;
-        let todos = await Todos.create({ name, description });
+        let todos = createToDos(req, res, next);
         return res
             .status(200)
             .json({ message: "created successfully!!", data: todos });
@@ -13,9 +18,9 @@ export const createToDo: RequestHandler = async (req, res, next) => {
     }
 };
 
-export const getAllTodo: RequestHandler = async (req, res, next) => {
+export const getAllTodo: RequestHandler = (req, res, next) => {
     try {
-        const allTodos: Todos[] = await Todos.findAll();
+        let allTodos = services.getAllTodos(req, res, next);
         return res
             .status(200)
             .json({ message: "fetched successfully!", data: allTodos });
@@ -24,10 +29,9 @@ export const getAllTodo: RequestHandler = async (req, res, next) => {
     }
 };
 
-export const getTodoById: RequestHandler = async (req, res, next) => {
+export const getTodoById: RequestHandler = (req, res, next) => {
     try {
-        const { id } = req.params;
-        const todos: Todos | null = await Todos.findByPk(id);
+        const todos = services.getTodosById(req, res, next);
         return res
             .status(200)
             .json({ message: "fetched successfully", data: todos });
@@ -36,28 +40,23 @@ export const getTodoById: RequestHandler = async (req, res, next) => {
     }
 };
 
-export const updateTodo: RequestHandler = async (req, res, next) => {
+export const updateTodo: RequestHandler = (req, res, next) => {
     try {
-        const { id } = req.params;
-        const { name, description } = req.body;
-        await Todos.update({ name, description }, { where: { id } });
-        const updatedTodos: Todos | null = await Todos.findByPk(id);
+        const updatedTodo = services.updateTodos(req, res, next);
         return res
             .status(200)
-            .json({ message: "updated succesfully!", data: updatedTodos });
+            .json({ message: "updated succesfully!", data: updatedTodo });
     } catch (error) {
         return res.status(400).send({ message: error });
     }
 };
 
-export const deleteToDo: RequestHandler = async (req, res, next) => {
+export const deleteToDo: RequestHandler = (req, res, next) => {
     try {
-        const { id } = req.params;
-        const deleteToDo: Todos | null = await Todos.findByPk(id);
-        await Todos.destroy({ where: { id } });
+        const deleteTodo = services.deleteToDos(req, res, next);
         return res
             .status(200)
-            .json({ message: "deleted successfully!", data: deleteToDo });
+            .json({ message: "deleted successfully!", data: deleteTodo });
     } catch (error) {
         return res.status(400).send({ message: error });
     }

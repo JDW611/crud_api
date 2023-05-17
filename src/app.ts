@@ -22,7 +22,7 @@ app.use(
     }
 );
 
-app.listen(5000, async () => {
+app.listen(5000, () => {
     console.log("server started!!!!!");
-    await mysql.connect();
+    mysql.connect();
 });
